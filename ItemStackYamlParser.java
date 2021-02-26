@@ -121,7 +121,6 @@ class ItemStackYamlParser {
         Map<Enchantment, Integer> enchantments = new HashMap<>();
 
         enchantmentsSection.forEach(en -> {
-            System.out.println(en);
             enchantments.put(EnchantmentWrapper.getByName(en.toUpperCase()),
                     file.getInt(path + ".enchants." + en));
         });
