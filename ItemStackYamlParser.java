@@ -8,13 +8,16 @@
     lore:
     enchants:
  */
-
+// import yourself 
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
+import net.minecraft.server.v1_16_R3.NBTTagList;
+//
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -42,13 +45,13 @@ class ItemStackYamlParser {
 
     public List<ItemStack> getItemStacksByMaterial(Material material) {
         return itemStackList.stream().filter(itemStack ->
-                        itemStack.getType().equals(material))
+                itemStack.getType().equals(material))
                 .collect(Collectors.toList());
     }
 
     public List<ItemStack> getItemStacksByEnchants(Enchantment enchantment) {
         return itemStackList.stream().filter(itemStack ->
-                        itemStack.getEnchantments().containsKey(enchantment))
+                itemStack.getEnchantments().containsKey(enchantment))
                 .collect(Collectors.toList());
     }
 
@@ -88,6 +91,8 @@ class ItemStackYamlParser {
 
         itemStack.addUnsafeEnchantments(enchantments);
 
+        setGlow(path, itemStack);
+
         return itemStack;
     }
 
@@ -121,7 +126,7 @@ class ItemStackYamlParser {
         Map<Enchantment, Integer> enchantments = new HashMap<>();
 
         enchantmentsSection.forEach(en -> {
-            enchantments.put(EnchantmentWrapper.getByName(en.toUpperCase()),
+            enchantments.put(Enchantment.getByName(en.toUpperCase()),
                     file.getInt(path + ".enchants." + en));
         });
 
@@ -140,5 +145,25 @@ class ItemStackYamlParser {
         return toFormat.stream()
                 .map(this::formatText)
                 .collect(Collectors.toList());
+    }
+
+    private void setGlow(String path, ItemStack itemStack) {
+        if (file.getBoolean(path + ".glow")) {
+            addGlow(itemStack);
+        }
+    }
+
+    private ItemStack addGlow(ItemStack item){
+        net.minecraft.server.v1_16_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = null;
+        if (!nmsStack.hasTag()) {
+            tag = new NBTTagCompound();
+            nmsStack.setTag(tag);
+        }
+        if (tag == null) tag = nmsStack.getTag();
+        NBTTagList ench = new NBTTagList();
+        tag.set("ench", ench);
+        nmsStack.setTag(tag);
+        return CraftItemStack.asCraftMirror(nmsStack);
     }
 }
