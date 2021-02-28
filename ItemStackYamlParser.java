@@ -55,15 +55,20 @@ class ItemStackYamlParser {
                 .collect(Collectors.toList());
     }
 
-
     private Set<String> getSection(String path) {
         ConfigurationSection section = file.getConfigurationSection(path);
 
-        if (section == null) throw new NullPointerException("Section cannot be null");
+        Set<String> sectionSet = new HashSet<>();
 
-        return section.getKeys(false);
+        if (section != null) {
+               sectionSet.addAll(section.getKeys(false));
+        } else {
+            System.out.println("Section " + path + " is empty.");
+        }
+
+        return sectionSet;
     }
-
+  
     private void loadItems() {
         getItemSection().forEach(key ->
                 itemStackList.add(createItem(pathToItems + "." + key)));
