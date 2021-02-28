@@ -8,7 +8,7 @@
     lore:
     enchants:
  */
-// import yourself 
+// import spigot not spigot-api
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.NBTTagList;
 //
