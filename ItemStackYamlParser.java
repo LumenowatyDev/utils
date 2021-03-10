@@ -8,10 +8,6 @@
     lore:
     enchants:
  */
-// import spigot not spigot-api
-import net.minecraft.server.v1_16_R3.NBTTagCompound;
-import net.minecraft.server.v1_16_R3.NBTTagList;
-//
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -96,8 +92,6 @@ class ItemStackYamlParser {
 
         itemStack.addUnsafeEnchantments(enchantments);
 
-        setGlow(path, itemStack);
-
         return itemStack;
     }
 
@@ -150,25 +144,5 @@ class ItemStackYamlParser {
         return toFormat.stream()
                 .map(this::formatText)
                 .collect(Collectors.toList());
-    }
-
-    private void setGlow(String path, ItemStack itemStack) {
-        if (file.getBoolean(path + ".glow")) {
-            addGlow(itemStack);
-        }
-    }
-
-    private ItemStack addGlow(ItemStack item){
-        net.minecraft.server.v1_16_R3.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = null;
-        if (!nmsStack.hasTag()) {
-            tag = new NBTTagCompound();
-            nmsStack.setTag(tag);
-        }
-        if (tag == null) tag = nmsStack.getTag();
-        NBTTagList ench = new NBTTagList();
-        tag.set("ench", ench);
-        nmsStack.setTag(tag);
-        return CraftItemStack.asCraftMirror(nmsStack);
     }
 }
