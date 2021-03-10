@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 class ItemStackYamlParser {
+  
     private final FileConfiguration file;
     private final String pathToItems;
     private List<ItemStack> itemStackList;
@@ -57,9 +58,7 @@ class ItemStackYamlParser {
         Set<String> sectionSet = new HashSet<>();
 
         if (section != null) {
-               sectionSet.addAll(section.getKeys(false));
-        } else {
-            System.out.println("Section " + path + " is empty.");
+            sectionSet.addAll(section.getKeys(false));
         }
 
         return sectionSet;
