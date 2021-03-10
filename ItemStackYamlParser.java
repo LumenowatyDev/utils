@@ -57,9 +57,7 @@ class ItemStackYamlParser {
 
         Set<String> sectionSet = new HashSet<>();
 
-        if (section != null) {
-            sectionSet.addAll(section.getKeys(false));
-        }
+        if (section != null) sectionSet.addAll(section.getKeys(false));
 
         return sectionSet;
     }
@@ -81,9 +79,7 @@ class ItemStackYamlParser {
         ItemMeta itemMeta = itemStack.getItemMeta();
 
 
-        if (itemName != null) {
-            itemMeta.setDisplayName(formatText(itemName));
-        }
+        if (itemName != null) itemMeta.setDisplayName(formatText(itemName));
 
         itemMeta.setLore(formatText(lore));
 
@@ -140,8 +136,7 @@ class ItemStackYamlParser {
     }
 
     private List<String> formatText(List<String> toFormat) {
-        return toFormat.stream()
-                .map(this::formatText)
+        return toFormat.stream().map(this::formatText)
                 .collect(Collectors.toList());
     }
 }
